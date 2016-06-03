@@ -35,16 +35,5 @@ public class TestDao {
         //conn.close(); //т.к. буду использовать дальше
     }
 
-    @Test
-    public void TestSave() throws SQLException {
-        testConnection();
-        Audio audio = new Audio();
-        audio.setTitle("musik12");
-        audio.setYear(1900);
-        audio.setDuration(60);
-        audioDao.save(audio);
-        Assert.assertNotNull(audio);
-    }
-
 
 }
