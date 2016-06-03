@@ -43,7 +43,7 @@ public class TestDao {
         audio.setYear(1900);
         audio.setDuration(60);
         audioDao.save(audio);
-        Assert.assertNotNull(audio.getId());
+        Assert.assertNotNull(audio);
     }
 
 
