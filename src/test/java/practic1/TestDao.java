@@ -14,14 +14,12 @@ import java.sql.SQLException;
  */
 public class TestDao {
 
-    private static final java.lang.String DB_URL = "jdbc:mysql://localhost/pr1_db";
-    private static final String USER = "root";
-    private static final String PASS = "toor";
-    private static Connection conn = null;
-    static AudioDao audioDao;
+    public final java.lang.String DB_URL = "jdbc:mysql://localhost/pr1_db";
+    public final String USER = "root";
+    public final String PASS = "toor";
+    Connection conn = null;
 
 
-    //Тест соединения с БД
     @Test
     public void testConnection() throws SQLException {
         try {
@@ -32,8 +30,9 @@ public class TestDao {
             e.printStackTrace();
         }
         Assert.assertNotNull(conn);
-        //conn.close(); //т.к. буду использовать дальше
+        conn.close();
     }
+
 
 
 }

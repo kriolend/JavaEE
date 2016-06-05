@@ -20,7 +20,6 @@ public class AudioDao {
         this.connection = connection;
     }
 
-    //Сохранить аудиозапись
     public Audio save(Audio audio) {
         try {
             PreparedStatement statement = connection.prepareStatement("INSERT INTO AUDIOS (TITLE, YEAR,DURATION) VALUES (?,?,?) ", Statement.RETURN_GENERATED_KEYS);
@@ -44,7 +43,6 @@ public class AudioDao {
         return audio;
     }
 
-    //Обновить аудиозапись
     public Audio update(Audio audio) {
         try {
             PreparedStatement statement = connection.prepareStatement("UPDATE AUDIOS set TITLE = ?, YEAR = ?, DURATION = ? WHERE ID = ? ");
@@ -61,7 +59,6 @@ public class AudioDao {
         return audio;
     }
 
-    //Удалить аудиозапись
     public Audio delete(Audio audio) {
         try {
             PreparedStatement statement = connection.prepareStatement("delete from AUDIOS where AUDIOS=?");
@@ -74,11 +71,9 @@ public class AudioDao {
         return audio;
     }
 
-    //Вернуть аудиозапсь по ID
     public Audio getId(int id) {
         Statement statement = null;
-        sql = String.format("select ID,TITLE,YEAR,DURATION from AUDIOS where ID = %d",
-                id);
+        sql = String.format("select ID,TITLE,YEAR,DURATION from AUDIOS where ID =?", id);
 
         try {
             statement = connection.createStatement();
@@ -107,11 +102,10 @@ public class AudioDao {
         return null;
     }
 
-    //Вернуть все аудиозаписи
     public List<Audio> getAll() {
         sql = "select ID, TITLE, YEAR, DURATION from AUDIOS";
         Statement statement = null;
-        audioses = new ArrayList<Audio>();
+        audioses = new ArrayList<>();
         try {
             statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
@@ -139,11 +133,10 @@ public class AudioDao {
     }
 
 
-    //Получить список аудиозаписей по автору
     public List<Audio> audioByAuthor(int authorId) {
+        sql = "select title from audios where id IN (select audio_id from authors_audios where author_id=" + authorId + ")";
         Statement statement = null;
-        sql = ("select title from audios where id IN (select audio_id from authors_audios where author_id=" + authorId + ");");
-        audioses = new LinkedList<>();
+        audioses = new ArrayList<>();
         try {
             statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
@@ -160,7 +153,6 @@ public class AudioDao {
             if (statement != null) {
                 try {
                     statement.close();
-                    connection.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -169,9 +161,8 @@ public class AudioDao {
         return audioses;
     }
 
-    //Получить список аудиозаписей по автору написаный в указаный год
     public List<Audio> audioByAuthorByYear(int authorId, int year) {
-        sql = "SELECT title from audios where id IN (SELECT audio_id from authors_audios where author_id=" + authorId + ") AND audios.year=" + year + ";";
+        sql = "SELECT title from audios where id IN (SELECT audio_id from authors_audios where author_id=" + authorId + ") AND audios.year=" + year;
         audioses = new LinkedList<>();
         Statement statement = null;
         try {
@@ -190,7 +181,6 @@ public class AudioDao {
             if (statement != null) {
                 try {
                     statement.close();
-                    connection.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -199,7 +189,6 @@ public class AudioDao {
         return audioses;
     }
 
-    //Получить список аудиозаписей в указаный год с информацией об исполнителях (см. H4, L4)
     public List<Audio> audioByYearWithInfoAuthors(int year) {
         sql = "SELECT title, firstname, lastname FROM audios JOIN authors_audios ON audios.id=authors_audios.audio_id JOIN authors ON authors_audios.author_id=author_id WHERE audios.year=" + year + ";";
         audioses = new LinkedList<>();
@@ -223,7 +212,6 @@ public class AudioDao {
             if (statement != null) {
                 try {
                     statement.close();
-                    connection.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -232,7 +220,6 @@ public class AudioDao {
         return audioses;
     }
 
-    //Получить список аудиозаписей самого старого  исполнителя
     public List<Audio> adioByOldAuthor() {
         sql = "SELECT title FROM audios JOIN authors_audios ON audios.id=authors_audios.audio_id JOIN authors ON authors_audios.author_id=author_id WHERE  birthday = (SELECT MAX(birthday) FROM authors);";
         audioses = new LinkedList<>();

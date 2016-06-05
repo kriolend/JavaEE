@@ -21,7 +21,6 @@ public class AuthorDao {
         this.connection = connection;
     }
 
-    //Сохранить испонителя
     public Author save(Author author){
         try {
             PreparedStatement statement = connection.prepareStatement("insert INTO authors(FIRST_NAME, LAST_NAME, BIRTHDAY) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
@@ -39,7 +38,6 @@ public class AuthorDao {
         return author;
     }
 
-    //Обновить испонителя
     public Author update(Author author){
         try {
             PreparedStatement statement = connection.prepareStatement("update authors set FIRST_NAME=?, LAST_NAME=?, BIRTHDAY=?, ID=?");
@@ -55,7 +53,6 @@ public class AuthorDao {
         return author;
     }
 
-    //Удалить испонителя
     public Author delete(Author author){
         try {
             PreparedStatement statement = connection.prepareStatement("delete from AUTHORS where FIRST_NAME=?");
@@ -68,7 +65,6 @@ public class AuthorDao {
         return author;
     }
 
-    //Вернуть испонителя по ID
     public Author getId(int id){
         sql = String.format("select ID,FIRST_NAME,LAST_NAME,BirthDay from authors where ID=%d", id);
         Statement statement = null;
@@ -93,7 +89,6 @@ public class AuthorDao {
         return author;
     }
 
-    //Вернуть всех испонителей
     public List<Author> getAll(){
         sql = "select ID, FIRST_NAME, LAST_NAME, BIRTHDAY from authors";
         authorses = new ArrayList<Author>();
@@ -124,7 +119,6 @@ public class AuthorDao {
         return authorses;
     }
 
-    //Получить список испонителей родившихся в указаном диапазоне
     public List<Author> getAuthorsBetweenYears(String firstDate, String lastDate) {
         sql = "SELECT authors.ID, FIRST_NAME,LAST_NAME FROM authors WHERE authors.BIRTHDAY BETWEEN " + firstDate + "AND" + lastDate;
         authorses = new LinkedList<>();
@@ -145,7 +139,6 @@ public class AuthorDao {
             if (statement != null) {
                 try {
                     statement.close();
-                    connection.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -154,7 +147,6 @@ public class AuthorDao {
         return authorses;
     }
 
-    //"Получить список исполнителей родившихся в указаных датах.
     public List<Author> getAuthorsInYears(List<String> listDate) {
         String dates = "";
         for (int i = 0; i < listDate.size(); i++) {
