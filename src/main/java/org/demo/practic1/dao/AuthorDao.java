@@ -147,42 +147,6 @@ public class AuthorDao {
         return authorses;
     }
 
-    public List<Author> getAuthorsInYears(List<String> listDate) {
-        String dates = "";
-        for (int i = 0; i < listDate.size(); i++) {
-            if (i != listDate.size() - 1) {
-                dates = dates + "\"" + listDate.get(i) + "\", ";
-            } else {
-                dates = dates + "\"" + listDate.get(i) + "\"";
-            }
-        }
-        System.out.println(dates);
-        sql = "SELECT authors.id, FIRST_NAME, LAST_NAME FROM authors WHERE authors.BIRTHDAY IN (" + dates + ");";
-        authorses = new LinkedList<>();
-        try {
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(sql);
-            while (resultSet.next()) {
-                Author author = new Author();
-                author.setId(resultSet.getInt(1));
-                author.setFirstName(resultSet.getString(2));
-                author.setLastName(resultSet.getString(3));
-                authorses.add(author);
-            }
-            resultSet.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (statement != null) {
-                try {
-                    statement.close();
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return authorses;
-    }
+
 
 }

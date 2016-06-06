@@ -161,33 +161,6 @@ public class AudioDao {
         return audioses;
     }
 
-    public List<Audio> audioByAuthorByYear(int authorId, int year) {
-        sql = "SELECT title from audios where id IN (SELECT audio_id from authors_audios where author_id=" + authorId + ") AND audios.year=" + year;
-        audioses = new LinkedList<>();
-        Statement statement = null;
-        try {
-            statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
-
-            while (resultSet.next()) {
-                Audio audio = new Audio();
-                audio.setTitle(resultSet.getString(1));
-                audioses.add(audio);
-            }
-            resultSet.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return audioses;
-    }
 
     public List<Audio> audioByYearWithInfoAuthors(int year) {
         sql = "SELECT title, firstname, lastname FROM audios JOIN authors_audios ON audios.id=authors_audios.audio_id JOIN authors ON authors_audios.author_id=author_id WHERE audios.year=" + year + ";";
